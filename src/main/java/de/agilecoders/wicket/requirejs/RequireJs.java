@@ -34,14 +34,14 @@ public final class RequireJs {
      * @param application current application assigned to this thread
      * @param settings    the configuration settings for RequireJs
      */
-    public static void install(final WebApplication application, IRequireJsSettings settings) {
+    public static void install(final WebApplication application, IRequireJsSettingsFactory settingsFactory) {
         if (application.getMetaData(REQUIRE_JS_SETTINGS_META_DATA_KEY) == null) {
             WicketWebjars.install(application);
 
-            if (settings == null) {
-                settings = new RequireJsSettings();
+            if (settingsFactory == null) {
+                settingsFactory = new DefaultRequireJsSettingsFactory();
             }
-
+		RequireJsSettings settings = settingsFactory.create();
             application.setMetaData(REQUIRE_JS_SETTINGS_META_DATA_KEY, settings);
             application.mountResource(settings.getMountPath(), new WicketRequireJSLoader(settings));
         }
